@@ -21,9 +21,11 @@ solution = []
 current_state = []
 depth_limit = 10
 solve_num = 0
+solve_states = set()
+all_states = set()
 
 def dfs():
-    global current_state, solution, state2step, solve_num, depth_limit
+    global current_state, solution, state2step, solve_num, depth_limit, all_states
     # print(depth_limit)
     if len(solution) > depth_limit:
         return
@@ -44,22 +46,28 @@ def dfs():
         tidx2func[tidx](current_state)
         state_str = state_to_str(current_state)
         solution.append(tidx)
+        # print(all_states)
+        all_states.add(state_str)
+
         # 检查是否已经解决
         if is_solved(current_state):
             solve_num += 1
             # print("Solved!")
-            print("Solution: ", "".join([tidx2str[i] for i in solution]))
+            # print("Solution: ", "".join([tidx2str[i] for i in solution]))
             # print("state: ", state_to_str(current_state))
             # print("statue: ", current_state)
-            
-        if state_str not in state2step:
+            solve_states.add(state_to_str(current_state))
+        
+        # 这样搜会漏掉一些非最优解
+        if state_str not in state2step or len(solution) < state2step[state_str]:
+        # if True:
             state2step[state_str] = len(solution)
             dfs()
         solution.pop()
         tidx2func[(tidx+3)%6](current_state)
 
 def main():
-    global current_state, solution, state2step, depth_limit
+    global current_state, solution, state2step, depth_limit, all_states
 
     state_str = input("Enter the initial state: ")
     # 我直接硬编码我现在的状态
@@ -96,7 +104,7 @@ def main():
         depth_limit = d
         beg_time = time.time()
         dfs()
-        print(f"Depth limit: {d}, Solve num: {solve_num}, Time: {time.time()-beg_time}s")
+        print(f"Depth limit: {d}, All state: {len(all_states)}, Solve num: {solve_num}, Solve state num: {len(solve_states)}, Time: {time.time()-beg_time}s")
 
 if __name__ == "__main__":
     # 测试运行时间
