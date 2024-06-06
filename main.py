@@ -19,26 +19,39 @@ state2step = dict()
 solution = []
 # 当前的状态
 current_state = []
+depth_limit = 10
+solve_num = 0
 
 def dfs():
-    global current_state, solution, state2step, depth
-    if len(solution) > 14:
-        return
-    # 检查是否已经解决
-    solved = is_solved(current_state)
-    if solved:
-        print("Solved!")
-        print("Solution: ", "".join([tidx2str[i] for i in solution]))
-        print("state: ", state_to_str(current_state))
+    global current_state, solution, state2step, solve_num, depth_limit
+    # print(depth_limit)
+    if len(solution) > depth_limit:
         return
     # try RUF turns
     for tidx in tidxes:
+        # 如果和上两次的操作相同，那么就跳过
+        if len(solution) >= 2 and solution[-1] == solution[-2] == tidx:
+            continue
+        # 如果和上次相同，且均为逆操作，那么跳过
+        if len(solution) >= 1 and solution[-1] == (tidx+3)%6:
+            continue
+        # 如果和上次相同，且均为逆时针操作，那么跳过
+        if len(solution) >= 1 and solution[-1] == tidx and solution[-1] > 2:
+            continue
+
         # print(len(state2step), solved)
         # print(current_state)
         tidx2func[tidx](current_state)
         state_str = state_to_str(current_state)
         solution.append(tidx)
-        # 仅有未出现过的状态才继续dfs
+        # 检查是否已经解决
+        if is_solved(current_state):
+            solve_num += 1
+            # print("Solved!")
+            print("Solution: ", "".join([tidx2str[i] for i in solution]))
+            # print("state: ", state_to_str(current_state))
+            # print("statue: ", current_state)
+            
         if state_str not in state2step:
             state2step[state_str] = len(solution)
             dfs()
@@ -46,16 +59,15 @@ def dfs():
         tidx2func[(tidx+3)%6](current_state)
 
 def main():
-    global current_state, solution, state2step
+    global current_state, solution, state2step, depth_limit
 
     state_str = input("Enter the initial state: ")
     # 我直接硬编码我现在的状态
     state_str = "111010111010011010000010" if state_str == "" else state_str
-
-    current_state = str_to_state(state_str)
-    solution = []
-    state2step = dict()
-    state2step[state_str] = 0
+    # 逆时针转角一次
+    # state_str = "111110110010011010000010"
+    # 顺时针转角一次
+    # state_str = "111011110010011010000010"
 
     # 整点测试
     # print(current_state)
@@ -73,8 +85,18 @@ def main():
     # state_str = "111111111111000000000000"
     # state_array = str_to_state(state_str)
     # print(is_solved(state_array))
-
-    dfs()
+    
+    # 改成迭代加深搜索
+    import time
+    for d in range(1, 15):
+        current_state = str_to_state(state_str)
+        solution = []
+        state2step = dict()
+        state2step[state_str] = 0
+        depth_limit = d
+        beg_time = time.time()
+        dfs()
+        print(f"Depth limit: {d}, Solve num: {solve_num}, Time: {time.time()-beg_time}s")
 
 if __name__ == "__main__":
     # 测试运行时间
@@ -82,3 +104,4 @@ if __name__ == "__main__":
     start_time = time.time()
     main()
     print(f"Time: {time.time()-start_time}s")
+    print(f"Solve num: {solve_num}")
