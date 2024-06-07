@@ -1,4 +1,4 @@
-from utils import face2idx, str_to_state, state_to_str, is_solved
+from utils import face2idx, str_to_state, state_to_str, is_oscube_solved
 from utils import turn_R, turn_U, turn_F, turn_R_rev, turn_U_rev, turn_F_rev
 
 
@@ -50,7 +50,7 @@ def dfs():
         all_states.add(state_str)
 
         # 检查是否已经解决
-        if is_solved(current_state):
+        if is_oscube_solved(current_state):
             solve_num += 1
             # print("Solved!")
             # print("Solution: ", "".join([tidx2str[i] for i in solution]))
@@ -92,7 +92,7 @@ def main():
     # 测试是否solved
     # state_str = "111111111111000000000000"
     # state_array = str_to_state(state_str)
-    # print(is_solved(state_array))
+    # print(is_oscube_solved(state_array))
     
     # 改成迭代加深搜索
     import time
