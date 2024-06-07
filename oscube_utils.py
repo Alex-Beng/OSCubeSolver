@@ -42,8 +42,7 @@ def state_to_str(state_array: list):
     state_str = ''.join([str(i) for i in state_str])
     return state_str
 
-# 判断的是OSCube的solved
-def is_oscube_solved(state_array: list):
+def is_solved(state_array: list):
     check_map = {
         'U': [3, 2, 1, 0],
         'L': [1, 0, 3, 2],
