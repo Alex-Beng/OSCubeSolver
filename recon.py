@@ -358,7 +358,7 @@ def main():
             for (j, pc) in enumerate(ori2pcs[i]):
                 moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
                 print(f'{j}: {moves_str}')
-                is_solved = input("Is solved? (y/n) default is n")
+                is_solved = input("Is solved? (y/n) default is n: ")
                 is_solved = True if is_solved == 'y' else False
                 if is_solved:
                     break
