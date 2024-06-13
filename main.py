@@ -53,7 +53,7 @@ def dfs():
         if is_solved(current_state):
             solve_num += 1
             # print("Solved!")
-            # print("Solution: ", "".join([tidx2str[i] for i in solution]))
+            print("Solution: ", "".join([tidx2str[i] for i in solution]))
             # print("state: ", state_to_str(current_state))
             # print("statue: ", current_state)
             solve_states.add(state_to_str(current_state))
@@ -78,7 +78,8 @@ def main():
     # state_str = "111011110010011010000010"
 
     # 整点测试
-    # print(current_state)
+    current_state = str_to_state(state_str)
+    print(current_state)
     # turn_R_rev(current_state)
     # turn_R(current_state)
     # turn_U_rev(current_state)
@@ -96,7 +97,7 @@ def main():
     
     # 改成迭代加深搜索
     import time
-    for d in range(6, 9):
+    for d in range(5, 9):
         current_state = str_to_state(state_str)
         solution = []
         state2step = dict()

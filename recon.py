@@ -258,6 +258,7 @@ def iddfs_solve(oldstyle_state, pre_turns):
     # turn the pre_turns
     for turn in pre_turns:
         tidx2func[turn](current_state)
+    ori_current_state = deepcopy(current_state)
 
     state2step = dict()
     solution = []
@@ -294,7 +295,9 @@ def iddfs_solve(oldstyle_state, pre_turns):
             tidx2func[(tidx+3)%6](current_state)
         return False
     for d in range(1, 9):
-        current_state = deepcopy(oldstyle_state)
+        # 傻逼了，这个需要的是pre_turns之后的状态，而不是传入的原始状态
+        # current_state = deepcopy(oldstyle_state)
+        current_state = deepcopy(ori_current_state)
         solution = []
         state2step = dict()
         state2step[state_to_str(current_state)] = 0
@@ -326,7 +329,7 @@ def main():
     prev_moves = []
     udc = UpDownCube()
     while True:
-        updown_state = input(">>>")
+        updown_state = input(">>>")        
         ret = udc.from_string(updown_state)
         if ret is not None:
             print(ret)
@@ -342,37 +345,26 @@ def main():
             if not pc.check_corner_valid():
                 continue
             ori2pcs[pc.check_orientation()].append(pc)
+        # sort the pcs with the shortest solution
+        for i in [2, 0, 1]:
+            ori2pcs[i].sort(key=lambda x: len(iddfs_solve(x.to_oldstyle_state(), prev_moves)[0]))
+
         # find the ori == 2
-        print(f"------奇艺构型------最多尝试{len(ori2pcs[2])}个解法------")
-        print(f'------the QiYi structure------try at most {len(ori2pcs[2])} solutions------')
-        print("逐行尝试以下的解法，直至复原：")
-        print("Try the solutions line by line until solve:")
-        for pc in ori2pcs[2]:
-            moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
-            print(f'{moves_str}')
-            # solved = input("是否解决？(y/n) 默认为n")
-            # if solved.upper() == 'Y':
-            #     break
-            prev_moves += moves
-            # print(pc.to_string())
-        print(f"------奇艺构型+一个顺时针转角------最多尝试{len(ori2pcs[0])}个解法------")
-        print(f'------QiYi structure+one clockwise twist------try at most {len(ori2pcs[0])} solutions------')
-        for pc in ori2pcs[0]:
-            moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
-            print(f'{moves_str}')
-            # solved = input("是否解决？(y/n) 默认为n")
-            # if solved.upper() == 'Y':
-            #     break
-            prev_moves += moves
-        print(f"------奇艺构型+一个逆时针转角------最多尝试{len(ori2pcs[1])}个解法------")
-        print(f'------QiYi structure+one counterclockwise twist------try at most {len(ori2pcs[1])} solutions------')
-        for pc in ori2pcs[1]:
-            moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
-            print(f'{moves_str}')
-            # solved = input("是否解决？(y/n) 默认为n")
-            # if solved.upper() == 'Y':
-            #     break
-            prev_moves += moves
+        structure_names = ['QiYi+1CW', 'QiYi+1CCW', 'QiYi']
+        
+        for i in [2, 0, 1]:
+            print(f"-----------the {structure_names[i]} structure has {len(ori2pcs[i])} solutions")
+            print(f"-----------Try the solutions line by line until solve:")
+            for (j, pc) in enumerate(ori2pcs[i]):
+                moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
+                print(f'{j}: {moves_str}')
+                is_solved = input("Is solved? (y/n) default is n")
+                is_solved = True if is_solved == 'y' else False
+                if is_solved:
+                    break
+                prev_moves += moves
+            if is_solved:
+                break
 
     # test the iddfs_solve
     # cs = [[1, 1, 1, 0], [1, 0, 1, 1], [1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 0], [0, 0, 1, 0]]
@@ -415,10 +407,19 @@ def polecube_test():
     print(pc.check_orientation())
     print("------------------------")
 
+def iddfs_test():
+    print("---------iddfs test")
+    known_state = [[1, 1, 1, 0], [1, 0, 1, 1], [1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 0], [0, 0, 1, 0]]
+    # tidx2func[0](known_state)
+    moves, moves_str = iddfs_solve(known_state, [0, 1, 2, ])
+    print(moves_str, moves)
+    print("------------------------")
+
 if __name__ == "__main__":
     # the unit tests
     # updowncube_test()
     # exit()
     # polecube_test()
-    
+    # iddfs_test()
+    # iddfs_test()
     main()
