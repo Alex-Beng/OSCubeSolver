@@ -326,9 +326,9 @@ def main():
     the main function from up/down cube state to solve the cube with interaction
     """
     print_help()
-    prev_moves = []
     udc = UpDownCube()
     while True:
+        prev_moves = []
         updown_state = input(">>>")        
         ret = udc.from_string(updown_state)
         if ret is not None:
