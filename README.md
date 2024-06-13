@@ -32,3 +32,6 @@ with ULFRDB as the order, each face with clockwise order.
 
 an example state looks like 001101110111010000110100
 
+## Other experiment
+
+see [extra](extra.md) for more experiment

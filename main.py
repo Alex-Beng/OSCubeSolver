@@ -96,7 +96,7 @@ def main():
     
     # 改成迭代加深搜索
     import time
-    for d in range(1, 15):
+    for d in range(6, 9):
         current_state = str_to_state(state_str)
         solution = []
         state2step = dict()
@@ -105,6 +105,22 @@ def main():
         beg_time = time.time()
         dfs()
         print(f"Depth limit: {d}, All state: {len(all_states)}, Solve num: {solve_num}, Solve state num: {len(solve_states)}, Time: {time.time()-beg_time}s")
+        # print all the solve state
+        
+
+    # state_str = "111110110010011010000010"
+    # depth_limit = 9
+    # current_state = str_to_state(state_str)
+    # dfs()
+
+    # state_str = "111011110010011010000010"
+    # depth_limit = 9
+    # current_state = str_to_state(state_str)
+    # dfs()
+
+    # for s in solve_states:
+    #     print(s)
+    print(len(solve_states))
 
 if __name__ == "__main__":
     # 测试运行时间
