@@ -345,31 +345,33 @@ def main():
         # find the ori == 2
         print(f"------奇艺构型------最多尝试{len(ori2pcs[2])}个解法------")
         print(f'------the QiYi structure------try at most {len(ori2pcs[2])} solutions------')
-        print("按行尝试以下的解法，直至复原：")
+        print("逐行尝试以下的解法，直至复原：")
         print("Try the solutions line by line until solve:")
         for pc in ori2pcs[2]:
             moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
-            print(f'试一试解法: {moves_str}')
-            solved = input("是否解决？(y/n) 默认为n")
-            if solved.upper() == 'Y':
-                break
+            print(f'{moves_str}')
+            # solved = input("是否解决？(y/n) 默认为n")
+            # if solved.upper() == 'Y':
+            #     break
             prev_moves += moves
             # print(pc.to_string())
         print(f"------奇艺构型+一个顺时针转角------最多尝试{len(ori2pcs[0])}个解法------")
+        print(f'------QiYi structure+one clockwise twist------try at most {len(ori2pcs[0])} solutions------')
         for pc in ori2pcs[0]:
             moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
-            print(f'试一试解法: {moves_str}')
-            solved = input("是否解决？(y/n) 默认为n")
-            if solved.upper() == 'Y':
-                break
+            print(f'{moves_str}')
+            # solved = input("是否解决？(y/n) 默认为n")
+            # if solved.upper() == 'Y':
+            #     break
             prev_moves += moves
         print(f"------奇艺构型+一个逆时针转角------最多尝试{len(ori2pcs[1])}个解法------")
+        print(f'------QiYi structure+one counterclockwise twist------try at most {len(ori2pcs[1])} solutions------')
         for pc in ori2pcs[1]:
             moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
-            print(f'试一试解法: {moves_str}')
-            solved = input("是否解决？(y/n) 默认为n")
-            if solved.upper() == 'Y':
-                break
+            print(f'{moves_str}')
+            # solved = input("是否解决？(y/n) 默认为n")
+            # if solved.upper() == 'Y':
+            #     break
             prev_moves += moves
 
     # test the iddfs_solve
