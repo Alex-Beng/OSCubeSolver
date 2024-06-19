@@ -78,4 +78,4 @@ for possible_state in possible_states:
 
 possible_states为通过平凹状态搜索得到的所有可能状态。
 
-可是使用recon.py来尝试这一方法。
+可以使用recon.py尝试这一方法。
