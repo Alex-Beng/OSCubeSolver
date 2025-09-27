@@ -13,8 +13,8 @@ We all know the god number of 222 cube is 11, so it's enough for us to solve the
 This script only neet to get the up/down states of ULF faces, and may try multiple solutions, which will be interactive.
 
 1. get the ULF faces' up/down string. 0 for down, 1 for up.
-2. run the program and input the up/down string
-3. follow the instruction, and try to solve the cube
+2. run the program and input the up/down string, the program will output the possible solutions one by one.
+3. try the solution, type new up/down string will speed up(~3 algs)
 
 
 ## Use `main.py` to solve

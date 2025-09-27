@@ -245,10 +245,17 @@ class PoleCube:
                     break
         return sum(corner_ori) % 3
 
-from oscube_utils import face2idx, str_to_state, state_to_str, is_solved
+from oscube_utils import face2idx, str_to_state, state_to_str, is_solved, state_to_viz_str
 from oscube_utils import turn_R, turn_U, turn_F, turn_R_rev, turn_U_rev, turn_F_rev
 from main import tidx2func, tidxes, tidx2str
 from copy import deepcopy
+from IPython import embed
+
+def apply_pre_turns(current_state, pre_turns):
+    for turn in pre_turns:
+        tidx2func[turn](current_state)
+
+
 def iddfs_solve(oldstyle_state, pre_turns):
     """ 
     just move the old implement iddfs in main.py to here
@@ -256,8 +263,7 @@ def iddfs_solve(oldstyle_state, pre_turns):
     current_state = deepcopy(oldstyle_state)
 
     # turn the pre_turns
-    for turn in pre_turns:
-        tidx2func[turn](current_state)
+    apply_pre_turns(current_state, pre_turns)
     ori_current_state = deepcopy(current_state)
 
     state2step = dict()
@@ -346,23 +352,37 @@ def main():
                 continue
             ori2pcs[pc.check_orientation()].append(pc)
         # sort the pcs with the shortest solution
-        for i in [2, 0, 1]:
-            ori2pcs[i].sort(key=lambda x: len(iddfs_solve(x.to_oldstyle_state(), prev_moves)[0]))
+        # for i in [2, 0, 1]:
+        #     ori2pcs[i].sort(key=lambda x: len(iddfs_solve(x.to_oldstyle_state(), prev_moves)[0]))
 
         # find the ori == 2
         structure_names = ['QiYi+1CW', 'QiYi+1CCW', 'QiYi']
-        
+        is_solved = False
         for i in [2, 0, 1]:
             print(f"-----------the {structure_names[i]} structure has {len(ori2pcs[i])} solutions")
             print(f"-----------Try the solutions line by line until solve:")
+            rej_pcs = set()
             for (j, pc) in enumerate(ori2pcs[i]):
+                if pc in rej_pcs: continue
                 moves, moves_str = iddfs_solve(pc.to_oldstyle_state(), prev_moves)
                 print(f'{j}: {moves_str}')
-                is_solved = input("Is solved? (y/n) default is n: ")
-                is_solved = True if is_solved == 'y' else False
+                raw_input = input("Is solved? input (y/n/curr state) default n: ")
+                is_solved = True if raw_input == 'y' else False
                 if is_solved:
                     break
                 prev_moves += moves
+                viz_state = raw_input if set(raw_input) == {'0', '1'} else ''
+                if viz_state: # reject incorrect pcs
+                    for _pc in ori2pcs[i]:
+                        if _pc in rej_pcs: continue
+                        _state = _pc.to_oldstyle_state()
+                        apply_pre_turns(_state, prev_moves)
+
+                        _viz_state = state_to_viz_str(_state)
+
+                        if _viz_state[:len(viz_state)] != viz_state:
+                            rej_pcs.add(_pc)
+                    print(f"rej : {len(rej_pcs)}")
             if is_solved:
                 break
 

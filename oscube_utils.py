@@ -42,6 +42,28 @@ def state_to_str(state_array: list):
     state_str = ''.join([str(i) for i in state_str])
     return state_str
 
+def state_to_viz_str(state_array: list):
+    check_map = {
+        'U': [3, 2, 1, 0],
+        'L': [1, 0, 3, 2],
+        'F': [1, 0, 3, 2],
+    }
+    face_map = {
+        'U' : 'D',
+        'L' : 'R',
+        'F' : 'B',
+    }
+    res = []
+    for f in ['U', 'L', 'F']:
+        face_state = state_array[face2idx[f]]
+        face_state_opposite = state_array[face2idx[face_map[f]]]
+        for i in range(4):
+            if face_state[i] == face_state_opposite[check_map[f][i]]:
+                res.append('1')
+            else:
+                res.append('0')
+    return ''.join(res)
+
 def is_solved(state_array: list):
     check_map = {
         'U': [3, 2, 1, 0],
