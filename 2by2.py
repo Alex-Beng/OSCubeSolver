@@ -1,7 +1,10 @@
 # search the 222 cube
 # just for fun
-from twobytwo_utils import face2idx, str_to_state, state_to_str, is_solved
-from twobytwo_utils import turn_R, turn_U, turn_F, turn_R_rev, turn_U_rev, turn_F_rev
+# from twobytwo_utils import face2idx, str_to_state, state_to_str, is_solved
+# from twobytwo_utils import turn_R, turn_U, turn_F, turn_R_rev, turn_U_rev, turn_F_rev
+
+from oscube_utils import face2idx, str_to_state, state_to_str, is_solved
+from oscube_utils import turn_R, turn_U, turn_F, turn_R_rev, turn_U_rev, turn_F_rev
 
 # 维护一个 state -> RUF 步数的map
 state2step = dict()
@@ -89,7 +92,7 @@ def bfs():
 def main():
     global current_state, steps, state2step, all_states, depth_limit
 
-    state_str = "000011112222333344445555"
+    state_str = "111010111010011010000010"
     import time
     for d in range(1, 15):
         # print(f"Depth: {d}")
@@ -107,6 +110,7 @@ def bfs_main():
     global current_state, steps, state2step, all_states, depth_limit
 
     state_str = "000011112222333344445555"
+    state_str = "111011110010011010000010"
     import time
 
     current_state = str_to_state(state_str)
@@ -118,7 +122,7 @@ def bfs_main():
     beg_time = time.time()
     bfs()
     # for d in range(1, 15):
-    # print(f"Depth: {d}, All state: {len(all_states)}, Time: {time.time()-beg_time}")
+    print(f"All state: {len(all_states)}, Time: {time.time()-beg_time}")
 
 if __name__ == "__main__":
     # main()
